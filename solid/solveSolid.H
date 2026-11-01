@@ -52,7 +52,10 @@
             if (gMax(pc) >= 0 || gMax(pc.boundaryField()) >= 0)
             {
                 Info << "This is going to crash (pc)! Decreasing timestep and reverting fields..." << endl;
-                Info << "Error: gMax(pc): " << gMax(pc) << ", gMax(pc.boundaryField()): " << gMax(pc.boundaryField()) << endl;
+                Info << "Error in solid region " << solidRegions[i].name()
+                     << ": gMax(pc): " << gMax(pc)
+                     << ", gMax(pc.boundaryField()): " << gMax(pc.boundaryField())
+                     << " (pc must stay < 0)" << endl;
                 timeStepDecrease = true;
                 #include "setSolidRegionDeltaT.H"
                 #include "revertValues.H"
@@ -68,6 +71,11 @@
                 || gMax(Ts) >= 423.15 || gMax(Ts.boundaryField()) >= 423.15)
             {
                 Info << "This is going to crash (Ts)! Decreasing timestep and reverting fields..." << endl;
+                Info << "Error in solid region " << solidRegions[i].name()
+                     << ": gMin(Ts): " << gMin(Ts) << ", gMax(Ts): " << gMax(Ts)
+                     << ", gMin(Ts.boundaryField()): " << gMin(Ts.boundaryField())
+                     << ", gMax(Ts.boundaryField()): " << gMax(Ts.boundaryField())
+                     << " (valid range 0 < Ts < 423.15 K)" << endl;
                 timeStepDecrease = true;
                 #include "setSolidRegionDeltaT.H"
                 #include "revertValues.H"

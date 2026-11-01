@@ -119,7 +119,14 @@ else if(timeStepDecrease == true) //time step is decreased
     Crel_dump.write();
 
     FatalError
-      << "Cannot decrease time step further. Dumping fields and exiting..." 
+      << "Cannot decrease time step further in solid region "
+      << solidRegions[i].name() << " (deltaT = " << runTime.deltaT().value()
+      << " s reached minDeltaT = " << minDeltaT << " s). Dumping Ts/pc/ws/Crel"
+      << " fields (*_dump) to time " << runTime.name() << " and exiting."
+      << " Check the 'This is going to crash' lines above for the field range,"
+      << " then the region's material models (light hygroscopic materials such as"
+      << " CalciumSilicate diverge; Impermeable is stable) and checkMesh for"
+      << " negative cell volumes from the wall extrusion."
       << abort(FatalError);
   }
   Info << "Decreasing time step...deltaT = " 
